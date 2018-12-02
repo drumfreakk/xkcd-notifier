@@ -59,7 +59,7 @@ while True:
                 sendMail('kieran.houtgraaf@gmail.com', 'There is a new xkcd comic! We are up to ' + str(what - 1) + '!', 'https://www.xkcd.com/' + str(what - 1))
             else:
                 sendMail('kieran.houtgraaf@gmail.com', 'There is a new xkcd comic! We are up to ' + str(what - 1) + '!', 'https://www.xkcd.com/' + str(what - 1) + '\n(And ' + str(done) + ' more...)')
-                useFile('latest', 'w', str(what) + 'True')
+        useFile('latest', 'w', str(what) + 'True')
         done = 0
         quit()
     else:
