@@ -4,7 +4,7 @@ from time import sleep, strftime
 import smtplib
 from email.message import EmailMessage
 
-os.chdir('/home/pi/xkcd-notifier')
+os.chdir('/home/kip/xkcd-notifier')
 
 what = 1990
 times = 0
