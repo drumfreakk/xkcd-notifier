@@ -33,7 +33,7 @@ try:
 
 		msg['Subject'] = subject
 		msg['From'] = 'xkcdnotifications@gmail.com'
-		msg['To'] = 'kieran.houtgraaf@gmail.com'
+		msg['To'] = toaddr
 
 		s = smtplib.SMTP('smtp.gmail.com', 587)
 		s.starttls()
