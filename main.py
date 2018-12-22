@@ -11,6 +11,9 @@ what = 1990
 times = 0
 done = 0
 
+###################################################
+# use files
+
 def useFile(doc, manner, write):
 	manners = ['r', 'a', 'w', 'w+']
 	if manner in manners:
@@ -25,7 +28,12 @@ def useFile(doc, manner, write):
 	else:
 		return "Invalid manner"
 
+###################################################
+
 try:
+
+###################################################
+# send mails
 
 	def sendMail(toaddr, subject, body):
 		msg = EmailMessage()
@@ -41,9 +49,21 @@ try:
 		s.send_message(msg)
 		s.quit()
 
+###################################################
+
+
+###################################################
+# test xkcd
+
 	def test():
 		r = requests.get('https://www.xkcd.com/' + str(what) + '/')
 		return r.status_code
+
+###################################################
+
+
+###################################################
+# main loop
 
 	what = int(useFile('latest', 'r', '')[0:4])
 
@@ -79,6 +99,8 @@ try:
 		else:
 			sendMail('kieran.houtgraaf@gmail.com', 'Error?', 'Non-200 or 404 status code: ' + str(status))
 			quit()
+
+###################################################
 
 except requests.exceptions.ConnectionError:
 	print(str(strftime('%Y-%m-%d %H:%M:%S')) + ' Failed due to no internet connection.')
