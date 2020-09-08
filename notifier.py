@@ -3,7 +3,44 @@
 import requests
 from sys import argv
 
-latest_file = "/home/kip/.config/polybar/xkcd-notifier/latest"
+latest_file = "latest"
+prefix = ""
+read = False
+
+help = """xkcd-notifier: Display the current XKCD comic number, and show if there are any new ones.
+
+Usage:
+	-h, --help	Display this message
+	--read		Mark the current comic as read
+	-p <prefix>	Set the prefix to put before the comic number
+	-f <file>	Location of the file xkcd-notifier stores the latest checked comic and status in
+"""
+
+skip = False
+for i in range(1, len(argv)):
+	if skip:
+		skip = False
+		continue
+
+	if len(argv) > i + 1:
+		if argv[i] == "-f":
+			latest_file = argv[i + 1]
+			skip = True
+
+		if argv[i] == "-p":
+			prefix = argv[i + 1]
+			skip = True
+
+	elif argv[i] == "--read":
+		read = True
+
+	elif argv[i] == "-h" or argv[i] == "--help":
+		print(help)
+		exit()
+	
+	else:
+		print("Unknown option, try using --help to see valid options")
+		exit()
 
 what = 0
 
@@ -37,11 +74,11 @@ while True:
 		if useFile(latest_file, 'r', '')[4:] == 'Unread':
 			toPrint += "New: "
 	
-		if argv[1] == "read":
+		if read:
 			toPrint = ""
 			useFile(latest_file, 'w', str(latest) + 'Read')
 		
 		toPrint += str(latest)
-		print(" " + toPrint)
+		print(prefix + " " + toPrint)
 		break
 
