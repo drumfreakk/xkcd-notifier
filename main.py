@@ -1,22 +1,11 @@
-import os
+#!/usr/bin/python
+
 import requests
-from time import sleep, strftime
-import smtplib
-from email.message import EmailMessage
-import sys
+from sys import argv
 
-os.chdir('/home/' + sys.argv[1] + '/xkcd-notifier')
+latest_file = "/home/kip/xkcd-notifier/latest"
 
-sender_email = "email.to.send.from@email.com"
-sender_email_password = "password"
-reciever_email = "email.to.send.to@email.com"
-
-what = 1990
-times = 0
-done = 0
-
-###################################################
-# use files
+what = 0
 
 def useFile(doc, manner, write):
 	manners = ['r', 'a', 'w', 'w+']
@@ -32,81 +21,27 @@ def useFile(doc, manner, write):
 	else:
 		return "Invalid manner"
 
-###################################################
 
-try:
+latest = int(useFile(latest_file, 'r', '')[0:4])
 
-###################################################
-# send mails
+while True:
+	status = requests.get('https://www.xkcd.com/' + str(latest + 1) + '/').status_code
 
-	def sendMail(toaddr, subject, body):
-		msg = EmailMessage()
-		msg.set_content(body)
+	if status == 200:
+		latest += 1
+		useFile(latest_file, 'w', str(latest) + 'Unread')
 
-		msg['Subject'] = subject
-		msg['From'] = sender_email
-		msg['To'] = toaddr
+	elif status == 404:
+		toPrint = ""
 
-		s = smtplib.SMTP('smtp.gmail.com', 587)
-		s.starttls()
-		s.login(sender_email, sender_email_password)
-		s.send_message(msg)
-		s.quit()
-
-###################################################
-
-
-###################################################
-# test xkcd
-
-	def test():
-		r = requests.get('https://www.xkcd.com/' + str(what) + '/')
-		return r.status_code
-
-###################################################
-
-
-###################################################
-# main loop
-
-	what = int(useFile('latest', 'r', '')[0:4])
-
-	while True:
-		status = test()
-		print(str(strftime('%Y-%m-%d %H:%M:%S')) + ' XKCD no.: ' + str(what) + ' Status: ' + str(status))
-
-		if useFile('latest', 'r', '')[4:] == 'Internet':
-			sendMail(reciever_email, 'Internet Error', 'On one ore more runs there was no internet connection, causing it to error. Check the logs for more details.')
-			print(str(strftime('%Y-%m-%d %H:%M:%S')) + ' Internet error resolved')
-
-		if status == 200:
-			what += 1
-			if times == 0:
-				useFile('latest', 'w', str(what) + 'False')
-				times = 1
-
-			else:
-				done += 1
-
-		elif status == 404:
-			if useFile('latest', 'r', '')[4:] == 'False':
-				if done == 0:
-					sendMail(reciever_email, 'There is a new xkcd comic! We are up to ' + str(what - 1) + '!', 'https://www.xkcd.com/' + str(what - 1))	
-
-				else:
-					sendMail(reciever_email, 'There is a new xkcd comic! We are up to ' + str(what - 1) + '!', 'https://www.xkcd.com/' + str(what - 1) + '\n(And ' + str(done) + ' more...)')
-
-			useFile('latest', 'w', str(what) + 'True')
-			done = 0
-			quit()
-
-		else:
-			sendMail(reciever_email, 'Error?', 'Non-200 or 404 status code: ' + str(status))
-			quit()
-
-###################################################
-
-except requests.exceptions.ConnectionError:
-	print(str(strftime('%Y-%m-%d %H:%M:%S')) + ' Failed due to no internet connection.')
-	useFile('latest', 'w', str(what) + 'Internet')
+		if useFile(latest_file, 'r', '')[4:] == 'Unread':
+			toPrint += "New: "
+	
+		if argv[1] == "read":
+			toPrint = ""
+			useFile(latest_file, 'w', str(latest) + 'Read')
+		
+		toPrint += str(latest)
+		print("" + toPrint)
+		break
 
