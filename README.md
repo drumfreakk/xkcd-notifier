@@ -3,6 +3,8 @@
 Displays the current xkcd comic and whether there are any new ones in polybar, written in python.
 For options see `notifier --help`.
 
+![Unread](/screenshots/unread.png) ![Read](/screenshots/read.png)
+
 ## Dependencies
 
 - Python 3
