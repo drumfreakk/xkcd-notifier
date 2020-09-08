@@ -3,7 +3,7 @@
 import requests
 from sys import argv
 
-latest_file = "/home/kip/xkcd-notifier/latest"
+latest_file = "/home/kip/.config/polybar/xkcd-notifier/latest"
 
 what = 0
 
@@ -42,6 +42,6 @@ while True:
 			useFile(latest_file, 'w', str(latest) + 'Read')
 		
 		toPrint += str(latest)
-		print("" + toPrint)
+		print(" " + toPrint)
 		break
 
