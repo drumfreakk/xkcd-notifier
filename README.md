@@ -1,8 +1,13 @@
 # xkcd-notifier
 
-Displays the current xkcd comic and whether there are any new ones in polybar.
+Displays the current xkcd comic and whether there are any new ones in polybar, written in python.
 For options see `notifier --help`.
 
+## Dependencies
+
+- Python 3
+- [requests](https://pypi.org/project/requests/)
+- [siji](https://github.com/stark/siji/) for the default prefix
 
 ## Module
 
