@@ -18,8 +18,8 @@ For options see `notifier.py --help`.
 ```ini
 [module/xkcd]
 type = custom/script
-exec = ~/.config/polybar/xkcd-notifier/notifier.py -f ~/.config/polybar/xkcd-notifier/latest
-click-left =  xdg-open https://xkcd.com/ && ~/.config/polybar/xkcd-notifier/notifier.py -f ~/.config/polybar/xkcd-notifier/latest --read
-interval = 60
+exec = ~/.config/polybar/xkcd-notifier/notifier.py -p  
+click-left = xdg-open https://xkcd.com/ && ~/.config/polybar/xkcd-notifier/notifier.py -p  --read
+interval = 300
 ```
 
